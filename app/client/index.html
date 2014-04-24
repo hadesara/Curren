@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <title>Currency converter</title>
-  <script src="/bower_components/angular/angular.js"></script>
+  <script type="text/javascript" src="./lib/angular.min.js"></script>
   <script type="text/javascript" src="./app.js"></script>
   <script type="text/javascript" src="./indexCtrl.js"></script>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
 <body ng-controller="indexCtrl">
   <div>
@@ -24,16 +25,18 @@
     </form>
   </div>   -->
    <div>
-     Currency converter
-     <form ng-submit='convert(currency)'>
-       <label> value </label>
-       <input type='text' id='value' name='value' placeholder='value' ng-model='currency.value'/>
+     <h1>Currency converter</h1>
+     
+      <p><form class="well" ng-submit='convert(currency)'>
+       <label> From: </label>
+       <input type='text' id='value' name='value' class="span3" placeholder='value' ng-model='currency.value'/>
        <br />
        <label> converted value: </label>
-       <label id='convertedValue' ng-model='currency.convertedValue'>{{currency.convertedValue}}</label>
+       <label id='convertedValue'>{{convertedValue}}</label>
        <br/>
-       <button id="convert" type="submit">Convert</button>
-     </form>
+       <button id="convert" class="btn" type="submit">Convert</button>
+     </form></p>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
    </div>
 </body>
 </html>

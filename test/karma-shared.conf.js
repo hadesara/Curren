@@ -17,8 +17,8 @@ module.exports = function() {
       'bower_components/angularjs-scope.safeapply/src/Scope.SafeApply.js',
 
       //App-specific Code
-      'app/indexCtrl.js',
-      'app/app.js',
+      'app/client/indexCtrl.js',
+      'app/client/app.js',
 
       //Test-Specific Code
       'node_modules/chai/chai.js',
