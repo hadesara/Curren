@@ -5,7 +5,7 @@ var transactionSchema = new Schema
     ProviderName: String,
     Type: String,
     PaymentStatus: String,
-    Amount: {type: Number, get: getPrice, set: setPrice },
+    Amount: String,//{type: Number, get: getPrice, set: setPrice },
     currency: String
   });
 

@@ -27,4 +27,20 @@ describe("Unit: Testing Index Controller", function() {
         $httpBackend.flush();
         expect($scope.convertedValue).to.equal(60.21465);
     }));
+      var trans = [{"TransactionDate":"2014-04-24","ProviderName":"Hiren","Type":"New",
+              "PaymentStatus":"A","Amount":"3344.92","currency":"INR"}];
+      it('should call get transactions route and update the rootScope'
+          , inject(function($rootScope, $controller, $httpBackend) {
+        $httpBackend.when('GET','/api/transaction/USD').respond(trans);
+
+         var $scope = $rootScope.$new();
+        var ctrl = $controller('indexCtrl', {
+          $scope : $scope
+        });
+        $scope.getTransactions("USD");
+        $httpBackend.flush();
+        console.log($scope.transactions); 
+        expect($scope.transactions).to.equal(trans);
+    }));
+
 });

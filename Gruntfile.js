@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-  grunt.loadNpmTasks('grunt-simple-mocha');
+  // grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-open');
   grunt.loadNpmTasks('grunt-contrib-watch');

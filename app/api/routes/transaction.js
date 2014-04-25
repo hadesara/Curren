@@ -1,5 +1,6 @@
 'use strict';
 var Transaction = require('../models/transaction.js');
+var Conversion = require('./converter.js');
 module.exports = {
 
 	findAll : function(req, res) {
@@ -13,13 +14,49 @@ module.exports = {
 			else if(transactionsResult.length==0)
 			{
 				console.log('No transactions available');
-				res.send('No transactions available');
+				res.send([]);
 			}
 			else
 			{
 				var allTransactions = [];
 				for (var i = 0; i <= transactionsResult.length - 1; i++) {
 					allTransactions.push(new Transaction(transactionsResult[i]));
+				};
+				res.send(allTransactions);
+			}
+		});
+	},
+
+	getAllInCurrency : function(req, res) {
+		console.log('Retrieving All transactions..');
+		var newCurrency = req.params.currency;
+		Transaction.find({}, function(err, transactionsResult) {
+			if( err || !transactionsResult) 
+			{
+				console.log('No transactions found');
+				res.send('No transactions found');
+			}
+			else if(transactionsResult.length==0)
+			{
+				console.log('No transactions available');
+				res.send([]);
+			}
+			else
+			{
+				var allTransactions = [];
+				for (var i = 0; i <= transactionsResult.length - 1; i++) {
+					var Transaction = {};
+					Transaction.TransactionDate = transactionsResult[i].TransactionDate;
+					Transaction.ProviderName = transactionsResult[i].ProviderName;
+					Transaction.Type = transactionsResult[i].Type;
+					Transaction.PaymentStatus = transactionsResult[i].PaymentStatus;
+					var amount = Conversion.convertCurrency(transactionsResult[i].currency, newCurrency,
+										transactionsResult[i].Amount).toString();
+					 Transaction.Amount = ((amount.length-amount.indexOf("."))>3?
+											amount.substring(0,amount.indexOf(".") +3):
+											amount.substring(0, amount.length));
+					Transaction.currency = newCurrency;
+					allTransactions.push(Transaction);
 				};
 				res.send(allTransactions);
 			}

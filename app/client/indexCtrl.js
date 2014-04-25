@@ -1,46 +1,54 @@
 'use strict';
 var indexCtrl = function($scope, $http) {
-	$scope.master= {};
 	$scope.result = {};
-	$scope.success = false;
     $scope.currency ={};
+    $scope.transaction = {};
     $scope.transactions = {};
     $scope.convertedValue=0;
-	// $scope.getTransactions = function() {
-	// 	$http.get('/api/transaction').
-	// 		success(function(data, status, headers, config) {
-	// 			console.log(JSON.stringify(data));
-	// 			$scope.result = data.id;
-	// 			console.log("id:" + $scope.result)
-	// 			$scope.success = true;
-	// 		}).
-	// 		error(function(data, status, headers, config) {
-	// 			$scope.result = 'Error! ' + data;
-	// 		});
-	// };
-	
+	$scope.getTransactions = function(currency) {
+		$scope.currency = currency;
+		$http.get('/api/transaction/' + currency).
+			success(function(data, status, headers, config) {
+				console.debug(JSON.stringify($scope.transactions));
+				$scope.transactions = data;
+			}).
+			error(function(data, status, headers, config) {
+				$scope.result = 'Error! ' + data;
+			});
+	};
+
+	$scope.add = function(transaction) {
+		console.log(JSON.stringify(transaction));
+		$scope.transaction.TransactionDate = transaction.transactionDate;
+		$scope.transaction.ProviderName = transaction.provider;
+		$scope.transaction.Type = transaction.type;
+		$scope.transaction.PaymentStatus = transaction.status;
+		$scope.transaction.Amount = transaction.amount;
+		$scope.transaction.currency = transaction.currency;
+		$http.post('/api/transaction', $scope.transaction).
+			success(function(data, status, headers, config) {
+				$scope.result = data.id;
+				console.debug("id:" + $scope.result);
+				$scope.transaction = null;
+				$scope.getTransactions($scope.currency);
+				
+			}).
+			error(function(data, status, headers, config) {
+				$scope.result = 'Error! ' + data;
+			});
+	};
+
 	$scope.convert = function(currency) {
-        $scope.currency.from ="USD";
-        $scope.currency.to="INR";
-		$scope.master.from = currency.from;
-        $scope.master.to = currency.to;
-        $scope.master.value = currency.value;
-        console.log("sending request to:" + '/api/convert/' + currency.from + "/" + currency.to + "/" + currency.value);
-        //console.log("http?");
-    	//$.when(
+        console.debug("sending request to:" + '/api/convert/' + currency.from + "/" + currency.to + "/" + currency.value);
     		$http.get('/api/convert/' + currency.from + "/" + currency.to + "/" + currency.value).
 			success(function(data, status, headers, config) {
-				console.log("Data:" + JSON.stringify(data));
 				console.log("Converted value is: " + data.convertedValue);
 				var convertedValue = parseFloat(data.convertedValue);
 				if(convertedValue != NaN)
 					$scope.convertedValue = convertedValue;
 			}).
 			error(function(data, status, headers, config) {
-				console.log("Error");
 				$scope.result = 'Error! ' + data;
-			})
-			//).done(function() { console.log("get call complete")}).error(function() {console.log("Did not complete");});
+			});
 	};
-
 }

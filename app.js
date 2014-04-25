@@ -67,7 +67,8 @@ app.all('*', function(req, res, next) {
 
 // API: User routes
 app.get('/api/transaction', transaction.findAll);
-app.get('/api/transaction/:id', transaction.findById);
+app.get('/api/transaction/:currency', transaction.getAllInCurrency);
+// app.get('/api/transaction/:id', transaction.findById);
 app.post('/api/transaction', transaction.addTransaction);
 app.put('/api/transaction/:id', transaction.updateTransaction);
 app.delete('/api/transaction/:id', transaction.deleteTransaction);
